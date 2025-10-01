@@ -735,7 +735,7 @@
                                                   room.id ||
                                                   "未知"
                                                 }</span>
-                                                <span class="bg-primary/10 text-gray-600 px-2 py-0.5 rounded ml-1">频率: ${
+                                                <span class="bg-primary/10 text-gray-600 px-2 py-0.5 rounded ml-1">更新于${formatDate(new Date(room.updateTime))} | 频率: ${
                                                   room.setting
                                                     .delayIntervalSec + "s" ||
                                                   "未知"
@@ -867,29 +867,34 @@
                                         }
                                     </div>
                                 </div>
-
                                 <!-- 操作按钮 -->
                                 <div class="flex flex-wrap gap-2">
                                     <a href="${
                                       room.roomUrl || "#"
                                     }" target="_blank"
-                                       class="inline-flex items-center px-3 py-1.5 bg-primary text-white rounded-lg text-sm hover:bg-primary/90 transition-colors">
-                                        <i class="fa fa-external-link mr-1"></i> 进入直播间
+                                       class="inline-flex items-center px-3 py-1.5 bg-primary text-white rounded-lg text-sm hover:bg-primary/50 transition-colors">
+                                        <span><i class="fa fa-external-link mr-1"></i>进入直播间</span>
                                     </a>
                                     <button onclick="actionMonitor('${
                                       item.key
-                                    }',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                      <i class="fa fa-stop text-warning mr-1"></i> 停止监控
+                                    }',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-500 transition-colors">
+                                      <span class="text-danger"><i class="fa fa-stop mr-1"></i>停止监控</span>
                                     </button>
                                     ${
                                       isRecord
-                                        ? `<button onclick="actionRecord('${item.key}',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                      <i class="fa fa-pause text-warning mr-1"></i> 暂停录制
+                                        ? `<button onclick="actionRecord('${item.key}',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-500 transition-colors">
+                                      <span class="text-warning"><i class="fa fa-pause mr-1"></i>暂停录制</span>
                                   </button>`
-                                        : `<button onclick="actionRecord('${item.key}',true)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                      <i class="fa fa-play text-success mr-1"></i> 开始录制
+                                        : `<button onclick="actionRecord('${item.key}',true)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-500 transition-colors">
+                                      <span class="text-success"><i class="fa fa-play mr-1"></i>开始录制</span>
                                   </button>`
                                     }
+                                    <button onclick="
+                                  actionSetting('${item.key}',${item.room.setting.delayIntervalSec})" 
+                                  class="inline-flex items-center px-3 py-1.5 bg-gray-500 border text-white border-gray-300 rounded-lg text-sm hover:bg-gray-800 transition-colors">
+                                    <span class="text-white"> <i class="fa fa-cog mr-1"></i>设置</span>
+                                  </button>
+
                                 </div>
                                 </div>
                                     `;
@@ -984,7 +989,7 @@
                                                   room.id ||
                                                   "未知"
                                                 }</span>
-                                                <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded ml-1">频率: ${
+                                                <span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded ml-1">更新于${formatDate(new Date(room.updateTime))} | 频率: ${
                                                   room.setting
                                                     .delayIntervalSec + "s" ||
                                                   "未知"
@@ -1047,18 +1052,23 @@
                                     <a href="${
                                       room.roomUrl || "#"
                                     }" target="_blank"
-                                       class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                        <i class="fa fa-external-link mr-1"></i> 访问直播间
+                                       class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-primary transition-colors">
+                                        <span><i class="fa fa-external-link mr-1"></i>访问直播间</span>
                                     </a>
                                   ${
                                     item.status === "RUNNING"
-                                      ? `<button onclick="actionMonitor('${item.key}',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                  <i class="fa fa-stop text-warning mr-1"></i> 停止监控
+                                      ? `<button onclick="actionMonitor('${item.key}',false)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-500 transition-colors">
+                                  <span class="text-warning"><i class="fa fa-stop mr-1"></i>停止监控</span>
                                   </button>`
-                                      : `<button onclick="actionMonitor('${item.key}',true)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-50 transition-colors">
-                                  <i class="fa fa-play text-success mr-1"></i> 开启监控
+                                      : `<button onclick="actionMonitor('${item.key}',true)" class="inline-flex items-center px-3 py-1.5 bg-white border border-gray-300 rounded-lg text-sm hover:bg-gray-500 transition-colors">
+                                  <span class="text-success"><i class="fa fa-play mr-1"></i>开启监控</span>
                                   </button>`
                                   }
+                                  <button onclick="
+                                  actionSetting('${item.key}',${item.room.setting.delayIntervalSec})" 
+                                  class="inline-flex items-center px-3 py-1.5 bg-gray-500 border text-white border-gray-300 rounded-lg text-sm hover:bg-gray-800 transition-colors">
+                                    <span class="text-white"> <i class="fa fa-cog mr-1"></i>设置</span>
+                                  </button>
                                 </div>
                             </div>
                         `;
@@ -1099,12 +1109,58 @@
         });
       }
 
+      function actionSetting(roomKey,delayIntervalSec) {
+        showActionBeforeModal((key) => {
+          console.log("操作设置", roomKey,delayIntervalSec);
+          setModalContent(
+          "操作设置",
+          `<div id="inputContainer" class="mb-4">
+              <label for="delayIntervalSec" class="block text-sm font-medium text-gray-700 mb-1">刷新频率(s)</label>
+              <input
+                  type="number"
+                  value="${delayIntervalSec}"
+                  id="delayIntervalSec"
+                  class="input-field"
+                  placeholder="请设置直播间刷新频率"
+              >
+            </div>
+            
+            <p id="inputError" class="mt-1 text-sm text-red-600 hidden"></p>
+                      `,
+          [
+            {
+              text: "取消",
+              className:
+                "bg-gray text-gray-800 hover:bg-gray-300 focus:ring-gray-400",
+              onClick: closeModal,
+            },
+            {
+              text: "确定",
+              className:
+                "bg-primary text-white hover:bg-primary/90 focus:ring-primary",
+              onClick: () => {
+                let delayIntervalSec = document.getElementById("delayIntervalSec").value;
+                closeModal();
+                actionRequest("setting",{key:roomKey,actionKey:key,delayIntervalSec:delayIntervalSec})
+                .then(msg=>{
+                  showActionAfterModal(msg);
+                  if(msg.code===0){
+                    handleManualRefresh();
+                  }
+                })
+              },
+            },
+          ]
+        );
+        });
+      }
+
       
       function showActionBeforeModal(onSubmit) {
         setModalContent(
           "操作验证",
           `<div id="inputContainer" class="mb-4">
-                          <label for="userInput" class="block text-sm font-medium text-gray-700 mb-1">操作秘钥</label>
+                          <label for="actionKey" class="block text-sm font-medium text-gray-700 mb-1">操作秘钥</label>
                           <input
                               type="password"
                               id="actionKey"
@@ -1219,6 +1275,9 @@
         if (!num && num !== 0) return "0";
         // 处理字符串类型的数字
         if (typeof num === "string") {
+          if(num.endsWith("万")){
+            return num;
+          }
           num = parseInt(num);
           if (isNaN(num)) return num;
         }
