@@ -61,9 +61,11 @@
                 document.getElementById("targetUrl").textContent = targetUrl;
 
                 // 自动跳转（可设置延迟，单位毫秒）
-                setTimeout(() => {
-                    window.location.href = targetUrl;
-                }, 800); 
+                // setTimeout(() => {
+                //     window.location.href = targetUrl;
+                // }, 100); 
+
+                window.location.href = targetUrl;
 
             } catch (err) {
                 document.querySelector(".tips").textContent = "跳转失败：";
