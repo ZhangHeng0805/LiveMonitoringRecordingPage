@@ -17,36 +17,22 @@ function getMainUrl(fullUrl) {
       ? decodeURIComponent(urlParam)
       : atob(urlParam);
   } else if (redirectParam) {
-    getRedirectURL(redirectParam)
-    .then((data) =>{
-        mainUrl=data;
-    });
+    try {
+      mainUrl = getRedirectURL(redirectParam);
+    } catch (e) {console.error(e)}
   }
   // 确保URL以斜杠结尾
   return mainUrl.endsWith("/") ? mainUrl : `${mainUrl}/`;
 }
 
-async function getRedirectURL(JSON_URL) {
-  return await new Promise((resolve) => {
-    fetch(JSON_URL)
-      .then((response) => {
-        // 检查响应状态
-        if (!response.ok) {
-          throw new Error(`请求失败：${response.status}`);
-        }
-        // 解析JSON数据
-        return response.json();
-      })
-      .then((mockData) => {
-        console.log("getRedirectURL获取的数据", mockData);
-        // 处理数据
-        const targetUrl = config.redirectUrl;
-        // 校验URL
-        if (!targetUrl) throw new Error("JSON 中未找到 redirectUrl 字段");
-        resolve(targetUrl);
-      })
-      .catch((error) => {
-        console.error("获取getRedirectURL失败", error);
-      });
-  });
+function getRedirectURL(JSON_URL) {
+  const xhr = new XMLHttpRequest();
+  xhr.open("GET", JSON_URL, false); // false = 同步阻塞
+  xhr.send(null);
+
+  if (xhr.status >= 200 && xhr.status < 300) {
+    return JSON.parse(xhr.responseText);
+  } else {
+    throw new Error("获取getRedirectURL失败", xhr);
+  }
 }
