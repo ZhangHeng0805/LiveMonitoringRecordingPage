@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>正在跳转...</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "Microsoft YaHei", sans-serif;
+            background: #f5f7fa;
+            color: #333;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .tips {
+            font-size: 18px;
+            color: #666;
+        }
+        .url {
+            color: #409eff;
+            font-weight: bold;
+            word-break: break-all;
+            max-width: 90%;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="tips">正在获取跳转地址...</div>
+    <div id="targetUrl" class="url">-</div>
+
+    <script>
+        // 1. 配置你的 JSON 文件地址（可修改）
+        const JSON_URL = "json/config.json";
+
+        // 2. 自动请求 JSON 并跳转
+        (async function autoRedirect() {
+            try {
+                // 请求JSON
+                const response = await fetch(JSON_URL);
+                if (!response.ok) throw new Error(`请求失败：${response.status}`);
+                
+                // 解析JSON
+                const config = await response.json();
+                const targetUrl = config.redirectUrl;
+
+                // 校验URL
+                if (!targetUrl) throw new Error("JSON 中未找到 redirectUrl 字段");
+
+                // 显示目标地址
+                document.getElementById("targetUrl").textContent = targetUrl;
+
+                // 自动跳转（可设置延迟，单位毫秒）
+                setTimeout(() => {
+                    window.location.href = targetUrl;
+                }, 800); 
+
+            } catch (err) {
+                document.querySelector(".tips").textContent = "跳转失败：";
+                document.getElementById("targetUrl").textContent = err.message;
+                document.getElementById("targetUrl").style.color = "#f56c6c";
+            }
+        })();
+    </script>
+</body>
+</html>
