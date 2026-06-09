@@ -1,4 +1,5 @@
 function getMainUrl(fullUrl) {
+  fullUrl = fullUrl || window.location.href;
   // const fullUrl = window.location.href;
   // 初始化默认基础URL
   let mainUrl = "http://localhost:8005/";
@@ -19,10 +20,14 @@ function getMainUrl(fullUrl) {
   } else if (redirectParam) {
     try {
       mainUrl = getRedirectURL(redirectParam);
-    } catch (e) {console.error(e)}
+    } catch (e) {
+      console.error(e);
+    }
   }
   // 确保URL以斜杠结尾
-  return mainUrl.endsWith("/") ? mainUrl : `${mainUrl}/`;
+  let rootURl = mainUrl.endsWith("/") ? mainUrl : `${mainUrl}/`;
+  window.MainUrl = rootURl;
+  return rootURl;
 }
 
 function getRedirectURL(JSON_URL) {
