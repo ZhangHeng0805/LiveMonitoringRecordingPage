@@ -427,7 +427,7 @@ function client_result() {
 
 function getClientIP() {
   const xhr = new XMLHttpRequest();
-  let ticket = "0f7ae45d572ce0181879b91efb8227801781067350";
+  let ticket = "b2bf4208262e161b6c3ad8e8aee7bec11781154761";
   try {
     if (window.xxxr.ip.ticket) {
       ticket = window.xxxr.ip.ticket;
