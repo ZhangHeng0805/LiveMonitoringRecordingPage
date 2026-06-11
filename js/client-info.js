@@ -426,9 +426,13 @@ function client_result() {
 
 function getClientIP() {
     const xhr = new XMLHttpRequest();
+    let ticket="0f7ae45d572ce0181879b91efb8227801781067350";
+    if(window.xxxr.ip.ticket){
+        ticket=window.xxxr.ip.ticket;
+    }
     xhr.open(
         "GET",
-        "https://my.ip.cn/json/?ticket=de8cf64c0d7484e8ed32714de89e178c1780890467",
+        "https://my.ip.cn/json/?ticket="+ticket,
         false
     ); // false = 同步阻塞
     xhr.send(null);

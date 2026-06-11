@@ -36,7 +36,9 @@ function getRedirectURL(JSON_URL) {
     xhr.send(null);
 
     if (xhr.status >= 200 && xhr.status < 300) {
-        return JSON.parse(xhr.responseText).redirectUrl;
+        let json=JSON.parse(xhr.responseText);
+        window.xxxr=json;
+        return json.redirectUrl;
     } else {
         throw new Error("获取getRedirectURL失败", xhr);
     }
