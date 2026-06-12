@@ -377,8 +377,8 @@ function debounce(func, wait, immediate) {
 }
 
 function client_result() {
-  var sid = getSid();
-  var cid = getCid();
+  // var sid = getSid();
+  // var cid = getCid();
   var os = getOS();
   var browser = getBrowser();
   var spider = getSpider();
@@ -399,8 +399,8 @@ function client_result() {
   var vp = 0 >= ca[0] || 0 >= ca[1] ? "" : ca.join("x");
 
   var ClientData = {
-    sid: sid,
-    cid: cid, //Cookie ID
+    // sid: sid,
+    // cid: cid, //Cookie ID
     dt: document.title || "", //页面title
     dl: location.href, //页面地址
     dr: ref.rurl,
@@ -417,7 +417,7 @@ function client_result() {
     je: b.javaEnabled ? 1 : 0, //浏览器是否已启用 Java
     app: appName, //APP名
     br: brandName, //设备名
-    t: dongle(sid, cid, r, browser.version),
+    // t: dongle(sid, cid, r, browser.version),
     r: r, //时间戳
   };
   // console.log(ClientData);
