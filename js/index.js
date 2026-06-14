@@ -19,10 +19,18 @@ function getMainUrl(fullUrl) {
             : atob(urlParam);
     } else if (redirectParam) {
         try {
-            mainUrl = getRedirectURL(redirectParam);
+            mainUrl = getRedirectConfig(redirectParam).redirectUrl;
         } catch (e) {
             console.error(e);
         }
+    }
+    try {
+        if (!window.xxxr) {
+            const configUrl = "https://zhangheng0805.github.io/LiveMonitoringRecordingPage/redirect/json/config.json";
+            getRedirectConfig(configUrl);
+        }
+    } catch (e) {
+        console.error(e);
     }
     // 确保URL以斜杠结尾
     let rootURl = mainUrl.endsWith("/") ? mainUrl : `${mainUrl}/`;
@@ -30,16 +38,16 @@ function getMainUrl(fullUrl) {
     return rootURl;
 }
 
-function getRedirectURL(JSON_URL) {
+function getRedirectConfig(config_url) {
     const xhr = new XMLHttpRequest();
-    xhr.open("GET", JSON_URL + "?_t=" + new Date().getTime(), false); // false = 同步阻塞
+    xhr.open("GET", config_url + "?_t=" + new Date().getTime(), false); // false = 同步阻塞
     xhr.send(null);
 
     if (xhr.status >= 200 && xhr.status < 300) {
-        let json=JSON.parse(xhr.responseText);
-        window.xxxr=json;
-        return json.redirectUrl;
+        let config = JSON.parse(xhr.responseText);
+        window.xxxr = config;
+        return config;
     } else {
-        throw new Error("获取getRedirectURL失败", xhr);
+        throw new Error("获取getRedirectConfig失败" + xhr);
     }
 }

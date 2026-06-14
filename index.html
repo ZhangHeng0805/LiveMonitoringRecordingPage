@@ -29,6 +29,13 @@
                 },
             },
         };
+        var _hmt = _hmt || [];
+        (function () {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?5087e13fa5fa20d0d364de6066042695";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+        })();
     </script>
     <!-- 自定义工具类 -->
     <style type="text/tailwindcss">
@@ -346,7 +353,7 @@
     const fullUrl = window.location.href;
     const MainUrl = getMainUrl(fullUrl);
 
-    
+
     function generateLink(links) {
         let html = "相关链接:";
         Object.keys(links).forEach(key => {
@@ -610,7 +617,7 @@
             index * 0.1
         }s forwards`;
 
-        const startTime = room.startTime? formatDate(new Date(room.startTime)) : "未知";
+        const startTime = room.startTime ? formatDate(new Date(room.startTime)) : "未知";
         // 平台特定信息网格
         let infoGridItems = `<div class="flex items-center">
                                 <i class="fa fa-calendar text-primary mr-1"></i>
@@ -626,8 +633,8 @@
             infoGridItems += createLivingDouYinInfoGridItems(room);
         }
         // 快手直播间数据
-        else if(room.platform === "KuaiShou"){
-            
+        else if (room.platform === "KuaiShou") {
+
         }
 
         // 确定当前显示的观众数（用于封面显示）
@@ -997,7 +1004,7 @@
     }
 
     async function actionRequest(path, params) {
-        return request(`action/${path}`,params);
+        return request(`action/${path}`, params);
     }
 
     async function request(path, params) {
@@ -1013,7 +1020,7 @@
                     return response.json();
                 })
                 .then((mockData) => {
-                    console.log(path+"获取的数据:", mockData);
+                    console.log(path + "获取的数据:", mockData);
                     // 处理数据
                     resolve(mockData);
                 })
