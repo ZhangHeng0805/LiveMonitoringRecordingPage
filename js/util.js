@@ -1,32 +1,38 @@
 //发起GET请求
 async function getRequest(path, params) {
-  let requestParam = "";
-  if (params) {
-    requestParam = `?${objectToUrlParams(params)}`;
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 10000); // 10秒超时
+  try{
+    let requestParam = "";
+    if (params) {
+      requestParam = `?${objectToUrlParams(params)}`;
+    }
+    path = path.startsWith("/") ? path.substring(1) : path;
+    let root = window.MainUrl ? window.MainUrl : "";
+    let url = `${root}${path}${requestParam}`;
+    const res = await fetch(url, {
+      signal: controller.signal,
+      method: "GET",
+    });
+    if (!res.ok) {
+      throw new Error(`网络响应错误: ${res.status} ${res.statusText}`);
+    }
+    const mockData = await res.json();
+    console.log(path + "获取的数据:", mockData);
+    return mockData;
+  } catch (error) {
+    let errorMessage = "请求失败";
+    if (error.name === "AbortError") {
+      errorMessage = "请求超时（10秒）";
+    } else if (error.message) {
+      errorMessage = error.message;
+    }
+    console.error(errorMessage, error);
+    throw error; // 抛出给调用方处理
+  } finally {
+    // 无论成功失败，都清除定时器，防止内存残留
+    clearTimeout(timeoutId);
   }
-  path = path.startsWith("/") ? path.substring(1) : path;
-  let root = window.MainUrl ? window.MainUrl : "";
-  let url = `${root}${path}${requestParam}`;
-  return await new Promise((resolve) => {
-    fetch(url)
-      .then((response) => {
-        // 检查响应状态
-        if (!response.ok) {
-          throw new Error("网络响应不正常");
-        }
-        // 解析JSON数据
-        return response.json();
-      })
-      .then((mockData) => {
-        console.log(path + "获取的数据:", mockData);
-        // 处理数据
-        resolve(mockData);
-      })
-      .catch((error) => {
-        console.error("请求失败:", error);
-        throw error;
-      });
-  });
 }
 
 //发起POST请求

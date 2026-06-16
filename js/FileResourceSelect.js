@@ -22,7 +22,7 @@ function showFileSelectModal(key) {
 async function fetchFolderContents(path = "./") {
   try {
     // 这里直接用你的 request 方法 + await 异步等待
-    const res = await request("fileRes", {
+    const res = await getRequest("fileRes", {
       key: document.getElementById("fileTree").dataset.key,
       path: path,
     });
@@ -39,7 +39,7 @@ async function renderContent(boxDom, path) {
   // loading
   boxDom.innerHTML = `<div class="text-gray-500 text-sm py-1"><i class="fa fa-spinner fa-spin mr-1"></i>加载中...</div>`;
   const list = await fetchFolderContents(path);
-  console.log("list", list);
+  // console.log("list", list);
   boxDom.innerHTML = "";
   if (!list || list.length === 0) {
     boxDom.innerHTML = `<div class="text-gray-400 text-sm py-1">暂无信息</div>`;

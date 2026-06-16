@@ -108,6 +108,20 @@ function actionRecord(roomKey, isRecord) {
     });
   });
 }
+function delRoom(roomKey) {
+  showActionBeforeModal((key) => {
+    actionRequest("delRoom", {
+      key: roomKey,
+      actionKey: key,
+    }).then((data) => {
+      data.title = "操作结果";
+      showActionAfterModal(data);
+      if (data.success) {
+        handleManualRefresh();
+      }
+    });
+  });
+}
 
 //直播间设置操作
 function addRoom() {
@@ -115,7 +129,7 @@ function addRoom() {
     setModalContent(
       `新增直播监听`,
       `<div id="roomIDContainer" class="mb-4">
-                <label for="delayIntervalSec" class="block text-sm font-medium text-gray-700 mb-1">直播间ID</label>
+                <label for="roomID" class="block text-sm font-medium text-gray-700 mb-1">直播间ID</label>
                 <input type="text"
                     id="roomID"
                     class="input-field"
@@ -123,7 +137,7 @@ function addRoom() {
                     placeholder="请输入直播间ID">
             </div>
             <div id="platformContainer" class="mb-4">
-                <label for="delayIntervalSec" class="block text-sm font-medium text-gray-700 mb-1">直播间平台</label>
+                <label for="platform" class="block text-sm font-medium text-gray-700 mb-1">直播间平台</label>
                 <select id="platform" class="input-field">
                 </select>
             </div>
@@ -135,6 +149,14 @@ function addRoom() {
                     id="delayIntervalSec"
                     class="input-field"
                     placeholder="请设置直播间刷新频率">
+            </div>
+            <div id="isRecordContainer" class="mb-4">
+              <label class="flex items-center space-x-2 cursor-pointer">
+                <input type="checkbox"
+                    id="isRecord"
+                    class="h-4 w-4 text-primary focus:ring-primary" checked>
+                <span class="text-sm font-medium text-gray-700">开启直播录制</span>
+              </label>
             </div>
             <div id="openSubtitleContainer" class="mb-4">
               <label class="flex items-center space-x-2 cursor-pointer">
@@ -160,6 +182,13 @@ function addRoom() {
                 <span class="text-sm font-medium text-gray-700">是否循环监听</span>
               </label>
             </div>
+            <div id="xiZhiUrlContainer" class="mb-4">
+                <label for="xiZhiUrl" class="block text-sm font-medium text-gray-700 mb-1">息知通知地址</label>
+                <input type="text"
+                    id="xiZhiUrl"
+                    class="input-field"
+                    placeholder="息知通知URl">
+            </div>
             <div id="cookieContainer" class="mb-4">
               <label for="cookieValue" class="block text-sm font-medium text-gray-700 mb-1">Cookie设置</label>
               <textarea
@@ -181,6 +210,9 @@ function addRoom() {
             "bg-primary text-white hover:bg-primary/90 focus:ring-primary",
           onClick: () => {
             const roomIDInput = document.getElementById("roomID").value.trim();
+            const xiZhiUrlInput = document
+              .getElementById("xiZhiUrl")
+              .value.trim();
             const delayIntervalSecInput =
               document.getElementById("delayIntervalSec").value;
             const platformSelect = document.getElementById("platform").value;
@@ -189,6 +221,7 @@ function addRoom() {
             const openSubtitleChecked =
               document.getElementById("openSubtitle").checked;
             const isLoopChecked = document.getElementById("isLoop").checked;
+            const isRecordChecked = document.getElementById("isRecord").checked;
             const cookieValueInput = document
               .getElementById("cookieValue")
               .value.trim();
@@ -211,14 +244,18 @@ function addRoom() {
             errorElement.classList.add("hidden");
 
             closeModal();
-            postRequest("action/add?actionKey=" + key, {
-              roomID: roomIDInput,
+            postRequest("action/addRoom?actionKey=" + key, {
+              id: roomIDInput,
               platform: platformSelect,
-              delayIntervalSec: delayIntervalSecInput,
-              convertFlvToMp4: convertFlvToMp4Checked,
-              openSubtitle: openSubtitleChecked,
-              isLoop: isLoopChecked,
-              cookie: cookieValueInput,
+              isRecord: isRecordChecked,
+              setting: {
+                delayIntervalSec: delayIntervalSecInput,
+                convertFlvToMp4: convertFlvToMp4Checked,
+                openSubtitle: openSubtitleChecked,
+                isLoop: isLoopChecked,
+                cookie: cookieValueInput,
+                xiZhiUrl: xiZhiUrlInput,
+              },
             }).then((msg) => {
               showActionAfterModal(msg);
               if (msg.success) {
@@ -281,6 +318,13 @@ function actionSetting(roomKey, settingStr) {
                 <span class="text-sm font-medium text-gray-700">是否循环监听</span>
               </label>
             </div>
+            <div id="xiZhiUrlContainer" class="mb-4">
+                <label for="xiZhiUrl" class="block text-sm font-medium text-gray-700 mb-1">息知通知地址</label>
+                <input type="text"
+                    id="xiZhiUrl"
+                    class="input-field"
+                    placeholder="息知通知URl">
+            </div>
             <div id="cookieContainer" class="mb-4">
               <label for="cookieValue" class="block text-sm font-medium text-gray-700 mb-1">Cookie设置</label>
               <textarea
@@ -311,6 +355,9 @@ function actionSetting(roomKey, settingStr) {
             const cookieValueInput = document
               .getElementById("cookieValue")
               .value.trim();
+            const xiZhiUrlInput = document
+              .getElementById("xiZhiUrl")
+              .value.trim();
             const errorElement = document.getElementById("inputError");
             // 简单的输入验证
             if (
@@ -326,13 +373,12 @@ function actionSetting(roomKey, settingStr) {
 
             closeModal();
             postRequest(`action/setting?actionKey=${key}&key=${roomKey}`, {
-              // key: roomKey,
-              // actionKey: key,
               delayIntervalSec: delayIntervalSecInput,
               convertFlvToMp4: convertFlvToMp4Checked,
               openSubtitle: openSubtitleChecked,
               isLoop: isLoopChecked,
-              cookie: cookieValueInput, // 添加Cookie参数
+              cookie: cookieValueInput,
+              xiZhiUrl: xiZhiUrlInput,
             }).then((msg) => {
               showActionAfterModal(msg);
               if (msg.success) {
