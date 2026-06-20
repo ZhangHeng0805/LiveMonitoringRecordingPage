@@ -170,9 +170,9 @@ function formatDate(date) {
 // 格式化文件大小
 function formatFileSize(bytes) {
     if (isNaN(bytes)) return bytes;
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 B';
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', "TB"];
+    const sizes = ['B', 'KB', 'MB', 'GB', "TB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
