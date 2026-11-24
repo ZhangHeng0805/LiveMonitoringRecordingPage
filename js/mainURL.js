@@ -75,7 +75,12 @@ function writeConfigCache(data) {
         // localStorage 不可用（隐私模式等）时忽略缓存
     }
 }
-
+/**
+ * 获取配置
+ * @param {*} config_url 配置地址
+ * @param {*} sync 是否同步
+ * @returns 
+ */
 function getRedirectConfig(config_url, sync) {
     // 默认地址优先走缓存
     const cached = config_url === REDIRECT_CONFIG_URL ? readConfigCache() : null;
