@@ -50,22 +50,51 @@ h1{margin:10px 0 6px;font-size:26px;letter-spacing:.3px}
  border-radius:10px;font-size:13px;line-height:1.7}
 .banner[hidden]{display:none}
 
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.kpis{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;margin-bottom:14px}
 .kpi{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
 .kpi b{display:block;font-size:22px;line-height:1.25;font-weight:650}
 .kpi b i{font-size:13px;font-weight:500;font-style:normal;color:var(--text-3);margin-left:2px}
 .kpi span{font-size:12px;color:var(--text-2)}
 .kpi.accent b{color:var(--primary)}
 
-.grid2{display:grid;grid-template-columns:1.35fr 1fr;gap:12px;margin-bottom:16px;align-items:start}
-.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.grid2{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:12px;margin-bottom:16px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;min-width:0}
 .card h2{margin:0 0 12px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:8px}
 .card h2 .dot{width:7px;height:7px;border-radius:50%;background:var(--primary)}
-.vbars{display:flex;align-items:flex-end;gap:4px;height:128px;padding:0 2px}
-.vbars .col{flex:1;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;min-width:0}
-.vbars .col .bar{width:100%;max-width:22px;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--primary-2),var(--primary));min-height:3px}
-.vbars .col .v{font-size:10px;color:var(--text-2);font-variant-numeric:tabular-nums;height:12px;line-height:12px}
-.vbars .col .cap{font-size:10px;color:var(--text-3);white-space:nowrap;height:12px;line-height:12px}
+/* 月度柱状图：横向可滑动，每根柱子都带数值和月份标签，保证移动端也能精确读数 */
+.vchart{position:relative}
+.vscroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:0 0 2px;scrollbar-width:thin}
+.vbars{display:flex;align-items:flex-end;gap:4px;height:150px;padding:0 2px}
+.vbars .col{flex:1 1 30px;min-width:18px;max-width:42px;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:3px;height:100%}
+.vbars .col .bar{width:100%;max-width:24px;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--primary-2),var(--primary));min-height:3px}
+.vbars .col .v{font-size:10.5px;color:var(--text-2);font-variant-numeric:tabular-nums;height:13px;line-height:13px}
+.vbars .col .cap{font-size:10px;color:var(--text-3);white-space:nowrap;height:14px;line-height:14px;font-variant-numeric:tabular-nums}
+.vbars .col .cap .cy{display:none}
+.vbars .col.cap-yr .cap{color:var(--text-2);font-weight:600}
+.vbars .col.cap-yr{border-left:1px dashed #e2e5ef;margin-left:1px;padding-left:1px}
+.vhint{margin-top:4px;text-align:right;font-size:11px;color:var(--text-3)}
+/* 明细表格：小屏也能一眼看全每个月的数据 */
+.mtable{display:flex;flex-direction:column;gap:7px;max-height:268px;overflow-y:auto;padding-right:2px}
+.mrow{display:grid;grid-template-columns:62px 1fr 40px;align-items:center;gap:8px;font-size:12px}
+.mrow .mm{color:var(--text-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mrow .mb{display:block;height:8px;border-radius:5px;background:#f0f1f6;overflow:hidden}
+.mrow .mb i{display:block;height:100%;border-radius:5px;background:linear-gradient(90deg,var(--primary),var(--primary-2))}
+.mrow .mn{text-align:right;font-variant-numeric:tabular-nums;color:var(--text);font-weight:600}
+.chartToggle{margin-left:auto;height:24px;padding:0 10px;border-radius:999px;border:1px solid #dfe2ec;background:#fff;
+ color:var(--text-2);font-size:11.5px;font-weight:500;cursor:pointer;transition:.15s}
+.chartToggle:hover{border-color:var(--primary);color:var(--primary)}
+/* 点击柱子后的月份明细气泡 */
+.vbars .col{cursor:pointer}
+.vbars .col.on .bar{background:linear-gradient(180deg,#6366f1,#3730a3);box-shadow:0 0 0 2px rgba(99,102,241,.28)}
+.mtip{position:fixed;z-index:60;min-width:188px;max-width:248px;padding:9px 11px;border-radius:10px;background:#fff;
+ border:1px solid var(--line);box-shadow:0 10px 26px rgba(35,40,80,.16);font-size:12px;color:var(--text-2);line-height:1.75}
+.mtip .h{display:flex;align-items:baseline;gap:6px;margin-bottom:2px}
+.mtip .h b{font-size:13px;color:var(--text);font-weight:650}
+.mtip .h em{font-style:normal;font-size:11px;color:var(--primary);background:var(--primary-soft);padding:0 6px;border-radius:5px}
+.mtip .k{color:var(--text);font-variant-numeric:tabular-nums}
+.mtip .btn2{margin-top:7px;width:100%;height:26px;border-radius:7px;border:1px solid #dfe2ec;background:#fff;
+ color:var(--primary);font-size:11.5px;cursor:pointer;transition:.15s}
+.mtip .btn2:hover{background:var(--primary-soft);border-color:var(--primary)}
 .hbars{display:flex;flex-direction:column;gap:9px}
 .hbar{display:grid;grid-template-columns:104px 1fr 58px;align-items:center;gap:8px;font-size:12px}
 .hbar .lbl{color:var(--text-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -131,7 +160,7 @@ select:focus{border-color:var(--primary)}
 @media (max-width:1080px){
  .list{grid-template-columns:repeat(3,minmax(0,1fr))}
  .kpis{grid-template-columns:repeat(3,minmax(0,1fr))}
- .grid2{grid-template-columns:1fr}
+ .grid2{grid-template-columns:minmax(0,1fr)}
 }
 @media (max-width:820px){
  .list{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
@@ -142,6 +171,14 @@ select:focus{border-color:var(--primary)}
  h1{font-size:22px}
  .page{padding:16px 12px 32px}
  .hbar{grid-template-columns:84px 1fr 48px}
+ .vbars{height:158px;gap:5px}
+ .vbars .col{flex:0 0 32px;min-width:32px;max-width:32px}
+ .vbars .col .cap .cy{display:inline}
+ .card{padding:12px 12px}
+ .vscroll{padding-bottom:6px}
+ .vhint{text-align:center;font-size:11px}
+ .mtable{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 14px;max-height:none;overflow:visible}
+ .mrow{grid-template-columns:50px 1fr 24px;gap:6px;font-size:11.5px}
 }
 </style>
 <script src="js/mainURL.js"></script>
@@ -169,8 +206,12 @@ select:focus{border-color:var(--primary)}
 
   <section class="grid2">
     <div class="card">
-      <h2><i class="dot"></i>各月录屏期数</h2>
-      <div class="vbars" id="monthBars"></div>
+      <h2><i class="dot"></i>各月录屏期数<button class="chartToggle" id="btnMonthMode">明细</button></h2>
+      <div class="vchart" id="monthChart">
+        <div class="vscroll" id="monthScroll"><div class="vbars" id="monthBars"></div></div>
+        <div class="vhint" id="monthHint" hidden>← 左右滑动查看全部月份 →</div>
+      </div>
+      <div class="mtable" id="monthTable" hidden></div>
     </div>
     <div class="card">
       <h2><i class="dot"></i>时长排行 Top 5</h2>
@@ -212,9 +253,9 @@ getMainUrl();
  * （支持 http(s):// 绝对地址，也支持与页面同目录的相对路径）
  * ============================================================ */
 const SOURCES = [
-  { label: '2024', url: 'json/2024小兰花直播录屏.json' },
-  { label: '2025', url: 'json/2025小兰花直播录屏.json' },
-  { label: '2026', url: 'json/2026小兰花直播录屏.json' }
+  { label: '2024', url: 'json/合集·2024直播录屏.json' },
+  { label: '2025', url: 'json/合集·2025直播录屏.json' },
+  { label: '2026', url: 'json/合集·2026直播录屏.json' }
 ];
 
 const PAGE_SIZE = 60;
@@ -296,6 +337,7 @@ async function load() {
   $('#list').innerHTML = '';
   $('#kpis').innerHTML = '';
   $('#monthBars').innerHTML = '';
+  $('#monthTable').innerHTML = '';
   $('#durTop').innerHTML = '';
 
   const settled = await Promise.allSettled(SOURCES.map(fetchSource));
@@ -318,7 +360,7 @@ async function load() {
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
-  }).map(r => {
+  }).map((r, idx) => {
     const date = normDate(r.date, r.title);
     const { title, tags } = tidy(r.title, date);
     return {
@@ -326,10 +368,12 @@ async function load() {
       duration: r.duration, sec: toSec(r.duration),
       year: date.slice(0, 4),
       month: date.slice(0, 7),
-      title, tags, src: r.__src
+      title, tags, src: r.__src,
+      seq: idx   // JSON 原始顺序（跨文件按 SOURCES 顺序累加），用于同日期内稳定排序
     };
   }).filter(r => r.date)
-    .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : (a.duration < b.duration ? -1 : 1)));
+    /* 按日期升序；同一天内保持 JSON 原始顺序正序（原先按时长比较，会打乱同日顺序） */
+    .sort((a, b) => (a.date === b.date ? a.seq - b.seq : (a.date < b.date ? -1 : 1)));
 
   BASE.forEach((r, i) => { r.no = i + 1; });
 
@@ -346,6 +390,7 @@ async function load() {
   $('#srcPill').textContent = '数据源：' + SOURCES.length + ' 个 JSON 接口';
   buildHeader();
   buildCharts();
+  setMonthMode('chart');
   buildFilters();
   shown = PAGE_SIZE;
   render();
@@ -369,11 +414,14 @@ function buildHeader() {
   $('#updPill').textContent = '更新至 ' + last + (days <= 0 ? '（今天）' : `（${days} 天前）`);
 
   const longest = BASE.reduce((a, b) => (b.sec > a.sec ? b : a), BASE[0]);
+  /* 单期最短：排除掉解析不出时长的记录，避免出现 00:00 这种无效值 */
+  const shortest = BASE.filter(r => r.sec > 0).reduce((a, b) => (b.sec < a.sec ? b : a), BASE[0]);
   const kpis = [
     ['收录期数', BASE.length, '期', `${daySpan} 天跨度内`],
     ['累计时长', (totalSec / 3600).toFixed(1), '小时', `≈ ${(totalSec / 86400).toFixed(1)} 天连播`],
     ['平均每期', hm(Math.round(totalSec / BASE.length)), '', '按时长均值'],
     ['单期最长', longest.duration, '', `${longest.date} · ${weekday(longest.date)}`],
+    ['单期最短', shortest.duration, '', `${shortest.date} · ${weekday(shortest.date)}`],
     ['覆盖月份', months.length, '个月', `${yrs.join(' / ')} 年`],
   ];
   $('#kpis').innerHTML = kpis.map((k, i) =>
@@ -386,12 +434,28 @@ function buildCharts() {
   const ms = [...new Set(BASE.map(r => r.month))].sort();
   const counts = ms.map(m => ({ m, n: BASE.filter(r => r.month === m).length }));
   const max = Math.max(...counts.map(c => c.n), 1);
-  $('#monthBars').innerHTML = counts.map((c, i) => `
-    <div class="col" title="${c.m}　${c.n} 期">
-      <div class="v">${c.n >= max * .5 ? c.n : ''}</div>
-      <div class="bar" style="height:${Math.max(3, c.n / max * 88)}px"></div>
-      <div class="cap">${i % 4 === 0 ? (+c.m.slice(5)) + '月' : ''}</div>
+
+  /* 柱状图：每根柱子都标注数值；每月都有标签，每年首月额外带年份，避免只看柱高看不清数 */
+  $('#monthBars').innerHTML = counts.map((c, i) => {
+    const yy = c.m.slice(2, 4), mm = c.m.slice(5);
+    const isYearStart = i === 0 || counts[i - 1].m.slice(0, 4) !== c.m.slice(0, 4);
+    return `
+    <div class="col${isYearStart ? ' cap-yr' : ''}" data-m="${c.m}" title="${c.m}　${c.n} 期">
+      <div class="v">${c.n}</div>
+      <div class="bar" style="height:${Math.max(3, c.n / max * 92)}px"></div>
+      <div class="cap">${isYearStart ? `<span class="cy">${yy}/</span>` : ''}${mm}</div>
+    </div>`;
+  }).join('');
+
+  /* 明细视图：月份 + 条 + 精确期数，手机上一行一行看最稳妥 */
+  $('#monthTable').innerHTML = counts.map(c => `
+    <div class="mrow">
+      <span class="mm">${c.m}</span>
+      <span class="mb"><i style="width:${(c.n / max * 100).toFixed(1)}%"></i></span>
+      <span class="mn">${c.n}</span>
     </div>`).join('');
+
+  syncMonthHint();
 
   const top = [...BASE].sort((a, b) => b.sec - a.sec).slice(0, 5);
   const tmax = top[0].sec || 1;
@@ -401,6 +465,71 @@ function buildCharts() {
       <span class="track"><span class="fill" style="width:${(r.sec / tmax * 100).toFixed(1)}%"></span></span>
       <span class="num">${r.duration}</span>
     </div>`).join('');
+}
+
+/* 柱状图放不下时提示可横向滑动 */
+function syncMonthHint() {
+  const sc = $('#monthScroll');
+  if (!sc) return;
+  $('#monthHint').hidden = !(sc.scrollWidth > sc.clientWidth + 2);
+}
+
+/* ---------- 点击柱子查看该月明细 ---------- */
+let monthTip = null;
+
+function hideMonthTip() {
+  if (monthTip && monthTip.parentNode) monthTip.parentNode.removeChild(monthTip);
+  monthTip = null;
+  const on = document.querySelector('#monthBars .col.on');
+  if (on) on.classList.remove('on');
+}
+
+function showMonthTip(col) {
+  const m = col.dataset.m;
+  const rows = BASE.filter(r => r.month === m);
+  if (!rows.length) return;
+  hideMonthTip();
+  col.classList.add('on');
+
+  const total = rows.reduce((s, r) => s + r.sec, 0);
+  const longest = rows.reduce((a, b) => (b.sec > a.sec ? b : a), rows[0]);
+  const [yr, mo] = m.split('-');
+
+  const tip = document.createElement('div');
+  tip.className = 'mtip';
+  tip.innerHTML =
+    `<div class="h"><b>${yr} 年 ${+mo} 月</b><em>${rows.length} 期</em></div>` +
+    `<div>累计时长 <span class="k">${(total / 3600).toFixed(1)}</span> 小时</div>` +
+    `<div>平均每期 <span class="k">${hm(Math.round(total / rows.length))}</span></div>` +
+    `<div>最长一期 <span class="k">${esc(longest.duration)}</span> · ${longest.date.slice(5)}</div>` +
+    `<button class="btn2" data-m="${m}">只看这个月</button>`;
+  document.body.appendChild(tip);
+  monthTip = tip;
+
+  /* 定位：默认贴在柱子下方（不遮挡标题），下方空间不够再翻到上方，左右不超出屏幕 */
+  tip.style.left = '0px';
+  tip.style.top = '0px';
+  const r = col.getBoundingClientRect();
+  const tw = tip.offsetWidth, th = tip.offsetHeight;
+  let x = r.left + r.width / 2 - tw / 2;
+  x = Math.max(8, Math.min(x, window.innerWidth - tw - 8));
+  let y = r.bottom + 8;
+  if (y + th > window.innerHeight - 8) y = r.top - th - 8;
+  y = Math.max(8, Math.min(y, window.innerHeight - th - 8));
+  tip.style.left = Math.round(x) + 'px';
+  tip.style.top = Math.round(y) + 'px';
+
+  tip.addEventListener('click', e => {
+    const b = e.target.closest('.btn2');
+    if (!b) return;
+    e.stopPropagation();
+    $('#month').value = b.dataset.m;
+    curMonth = b.dataset.m;
+    shown = PAGE_SIZE;
+    render();
+    hideMonthTip();
+    $('#list').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 /* ---------- 筛选控件 ---------- */
@@ -426,6 +555,20 @@ $('#yearChips').addEventListener('click', e => {
   shown = PAGE_SIZE;
   render();
 });
+
+/* 点击柱子 → 弹出该月明细；点空白处或滚动图区时关闭 */
+$('#monthBars').addEventListener('click', e => {
+  const col = e.target.closest('.col');
+  if (!col) { hideMonthTip(); return; }
+  showMonthTip(col);
+});
+$('#monthScroll').addEventListener('scroll', hideMonthTip, { passive: true });
+document.addEventListener('click', e => {
+  if (!monthTip) return;
+  if (monthTip.contains(e.target)) return;
+  if (e.target.closest && e.target.closest('#monthBars .col')) return;
+  hideMonthTip();
+});
 $('#month').addEventListener('change', e => { curMonth = e.target.value; shown = PAGE_SIZE; render(); });
 $('#sort').addEventListener('change', e => { curSort = e.target.value; shown = PAGE_SIZE; render(); });
 $('#q').addEventListener('input', e => {
@@ -444,6 +587,21 @@ $('#clr').addEventListener('click', () => {
 $('#btnReload').addEventListener('click', load);
 $('#btnMore').addEventListener('click', () => { shown += PAGE_SIZE; render(); });
 
+/* 图表 / 明细 切换（移动端看精确数据用明细） */
+let monthMode = 'chart';
+function setMonthMode(mode) {
+  monthMode = mode;
+  hideMonthTip();
+  const chart = mode === 'chart';
+  $('#monthChart').hidden = !chart;
+  $('#monthTable').hidden = chart;
+  $('#btnMonthMode').textContent = chart ? '明细' : '图表';
+  if (chart) syncMonthHint();
+}
+$('#btnMonthMode').addEventListener('click', () => setMonthMode(monthMode === 'chart' ? 'table' : 'chart'));
+window.addEventListener('resize', () => { hideMonthTip(); if (monthMode === 'chart') syncMonthHint(); });
+window.addEventListener('scroll', () => hideMonthTip(), { passive: true });
+
 /* ---------- 列表 ---------- */
 function currentRows() {
   let rows = BASE.filter(r => {
@@ -453,14 +611,18 @@ function currentRows() {
     return [r.title, r.date, r.duration, r.tags.join(' '), r.year]
       .join(' ').toLowerCase().includes(kw);
   });
+  /* 四种排序方式保持原样：日期倒序 / 日期正序 / 时长从长到短 / 时长从短到长
+     no 是在“日期正序 + 同日期内 JSON 正序”下生成的位置号，
+     因此“最新在前”整体倒序后，同日期内的两条仍是 JSON 相对顺序的逆序（与全表序号一致） */
   if (curSort === 'desc') rows.sort((a, b) => b.no - a.no);
   else if (curSort === 'asc') rows.sort((a, b) => a.no - b.no);
-  else if (curSort === 'long') rows.sort((a, b) => b.sec - a.sec);
-  else rows.sort((a, b) => a.sec - b.sec);
+  else if (curSort === 'long') rows.sort((a, b) => (b.sec !== a.sec ? b.sec - a.sec : a.no - b.no));
+  else rows.sort((a, b) => (a.sec !== b.sec ? a.sec - b.sec : a.no - b.no));
   return rows;
 }
 
 function render() {
+  hideMonthTip();
   const rows = currentRows();
   const slice = rows.slice(0, shown);
   $('#result').textContent = `显示 ${slice.length} / ${rows.length} 期`;
