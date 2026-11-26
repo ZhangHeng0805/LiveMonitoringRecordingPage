@@ -13,15 +13,16 @@ function getMainUrl(fullUrl) {
     }
     // 处理URL参数中的url（优先级更高）
     const urlParams = new URLSearchParams(window.location.search);
-    const urlParam = urlParams.get("url");
+    
+    const rootParam = urlParams.get("root");
     const redirectParam = urlParams.get("redirect");
 
-    if (urlParam) {
+    if (rootParam) {
         // 解码参数中的URL（支持http开头的明文和base64编码）
         try {
-            mainUrl = urlParam.startsWith("http")
-                ? decodeURIComponent(urlParam)
-                : atob(urlParam);
+            mainUrl = rootParam.startsWith("http")
+                ? decodeURIComponent(rootParam)
+                : atob(rootParam);
         } catch (e) {
             console.error("解析 url 参数失败", e);
         }
