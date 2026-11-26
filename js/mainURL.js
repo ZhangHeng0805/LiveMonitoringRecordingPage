@@ -3,8 +3,8 @@ const REDIRECT_CONFIG_URL =
 const REDIRECT_CACHE_KEY = "lmr.redirect.config";
 const REDIRECT_CACHE_TTL = 10 * 60 * 1000; // 10 分钟内复用缓存，避免每次打开页面都同步请求外网
 
-function getMainUrl(fullUrl) {
-    fullUrl = fullUrl || window.location.href;
+function getMainUrl(fullUrl=window.location.href,isDefault=false) {
+    // fullUrl = fullUrl || window.location.href;
     // 初始化默认基础URL
     let mainUrl = "http://localhost:8005/";
     // 处理当前页面URL（如果是http开头）
@@ -13,7 +13,7 @@ function getMainUrl(fullUrl) {
     }
     // 处理URL参数中的url（优先级更高）
     const urlParams = new URLSearchParams(window.location.search);
-    
+
     const rootParam = urlParams.get("root");
     const redirectParam = urlParams.get("redirect");
 
@@ -26,9 +26,9 @@ function getMainUrl(fullUrl) {
         } catch (e) {
             console.error("解析 url 参数失败", e);
         }
-    } else if (redirectParam) {
+    } else if (redirectParam || isDefault) {
         try {
-            const config = getRedirectConfig(redirectParam, true);
+            const config = getRedirectConfig(redirectParam || REDIRECT_CONFIG_URL, true);
             if (config && config.redirectUrl) {
                 mainUrl = config.redirectUrl;
             }
