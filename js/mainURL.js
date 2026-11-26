@@ -3,7 +3,7 @@ const REDIRECT_CONFIG_URL =
 const REDIRECT_CACHE_KEY = "lmr.redirect.config";
 const REDIRECT_CACHE_TTL = 10 * 60 * 1000; // 10 分钟内复用缓存，避免每次打开页面都同步请求外网
 
-function getMainUrl(fullUrl=window.location.href,isDefault=false) {
+function getMainUrl(fullUrl=window.location.href,isDefault=true) {
     // fullUrl = fullUrl || window.location.href;
     // 初始化默认基础URL
     let mainUrl = "http://localhost:8005/";
